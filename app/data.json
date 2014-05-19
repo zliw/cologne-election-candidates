@@ -6695,7 +6695,7 @@
     {
         "wahl_bezeichnung": "Ratswahl NRW",
         "partei_langname": "Einzelbewerber#Kreische",
-        "partei_kurzname": "(Bürger)",
+        "partei_kurzname": "Einzelbewerber#Kreische",
         "wahlbezirk_identifier": 42,
         "name": "Kreische",
         "namensvorsatz": "",

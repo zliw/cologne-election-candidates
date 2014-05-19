@@ -12,10 +12,8 @@ angular.module('candidatesCologneElectionApp')
     map.setCenter(position, 11.25);
 
     var markers = new OpenLayers.Layer.Markers('Markers');
-    
+
     map.addLayer(markers);
-    
-    var index;
 
     var colors = {
       'spd': 'ff0000',
@@ -26,23 +24,39 @@ angular.module('candidatesCologneElectionApp')
       'afd': '009ee0',
       'fwk': '004191',
       'deinefreunde': '00aff3',
-      'piraten': '#fa8810'
-    }
-    
+      'diepartei': 'b5152b',
+      'piraten': 'fa8810',
+      'einzelbewerber': 'ffffff',
+      'einheit': 'ffae00',
+      'big': '061f71',
+      'pronrw': '875d02'
+    };
+
     $scope.parties = [];
-    
-    var parties = {}
+
+    var parties = {};
+
+    function partyhash(party) {
+      var result = party.toLowerCase().replace(/[^a-z]/g,'');
+      if (result.indexOf('einzelbewerber') == 0) {
+        return 'einzelbewerber';
+      }
+
+      return result;
+    }
+
     $http.get('data.json').success(function(candidates) {
-      for (index in candidates) {
+      for (var index in candidates) {
         var candidate = candidates[index];
         parties[candidate.partei_kurzname] = parties[candidate.partei_kurzname] + 1;
 
-        var partyshort = candidate.partei_kurzname.toLowerCase().replace(/[^a-z]/g,'');
+        var partyshort = partyhash(candidate.partei_kurzname);
 
         position = new OpenLayers.LonLat(parseFloat(candidate.GeocodeLng), parseFloat(candidate.GeocodeLat));
         position = position.transform(fromProjection, toProjection);
-        
-        var icon = new OpenLayers.Icon('/images/' + partyshort + '.png');
+
+        var size = new OpenLayers.Size(28, 43);
+        var icon = new OpenLayers.Icon('/images/' + partyshort + '.png', size);
 
         var marker = new OpenLayers.Marker(position, icon);
 
@@ -50,13 +64,12 @@ angular.module('candidatesCologneElectionApp')
       }
 
       for (var key in parties) {
-        var partyshort = key.toLowerCase().replace(/[^a-z]/g,'');
+        var partyshort = partyhash(key);
         $scope.parties.push({
-          name:key,
-          color:colors[partyshort]
+          'name':key,
+          'color':colors[partyshort],
+          'count':parties[key]
         });
       }
-    }
-  )
-
+    });
   }]);
