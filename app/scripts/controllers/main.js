@@ -93,7 +93,7 @@ angular.module('candidatesCologneElectionApp')
         position = position.transform(fromProjection, toProjection);
 
         var size = new OpenLayers.Size(28, 43);
-        var icon = new OpenLayers.Icon('/images/' + partyshort + '.png', size);
+        var icon = new OpenLayers.Icon('images/' + partyshort + '.png', size);
 
         var marker = new OpenLayers.Marker(position, icon);
 
