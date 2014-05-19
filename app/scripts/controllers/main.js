@@ -1,23 +1,31 @@
 'use strict';
 
+// single file using Openlayers for presenting a map of cologne and the candidates
+// for communal election 2014. each party can be toggled on or off.
+
 angular.module('candidatesCologneElectionApp')
   .controller('MainCtrl', ['$scope', '$http', function ($scope, $http) {
 
     var element = document.getElementById('map');
-    element.style.height = '' + (window.innerHeight * 0.85) + 'px';
+    element.style.height = '' + (window.innerHeight * 0.8) + 'px';
 
     var map = new OpenLayers.Map('map');
     map.addLayer(new OpenLayers.Layer.OSM());
 
-    var fromProjection = new OpenLayers.Projection('EPSG:4326');   // Transform from WGS 1984
-    var toProjection   = new OpenLayers.Projection('EPSG:900913'); // to Spherical Mercator Projection
+    var fromProjection = new OpenLayers.Projection('EPSG:4326');
+    var toProjection   = new OpenLayers.Projection('EPSG:900913'); 
+
+    // this is the center of cologne
     var position       = new OpenLayers.LonLat(6.9599115, 50.9406645).transform(fromProjection, toProjection);
-    map.setCenter(position, 11.25);
+
+    // 11.5 was the scale found by trial and error
+    map.setCenter(position, 11.5);
 
     var markerLayer = new OpenLayers.Layer.Markers('Markers');
 
     map.addLayer(markerLayer);
 
+    // TODO: move this to a configuration file
     var colors = {
       'spd': 'ff0000',
       'cdu': '000000',
@@ -70,6 +78,7 @@ angular.module('candidatesCologneElectionApp')
 
     var markers = [];
 
+    //TODO: move party service to a controller
     $http.get('data.json').success(function(candidates) {
       for (var index in candidates) {
         var candidate = candidates[index];
