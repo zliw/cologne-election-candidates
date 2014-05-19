@@ -6694,8 +6694,8 @@
     },
     {
         "wahl_bezeichnung": "Ratswahl NRW",
-        "partei_langname": "Einzelbewerber#Kreische",
-        "partei_kurzname": "Einzelbewerber#Kreische",
+        "partei_langname": "Einzelbewerber",
+        "partei_kurzname": "Einzelbewerber",
         "wahlbezirk_identifier": 42,
         "name": "Kreische",
         "namensvorsatz": "",
@@ -7591,8 +7591,8 @@
     },
     {
         "wahl_bezeichnung": "Ratswahl NRW",
-        "partei_langname": "Einzelbewerber#Topcuoglu",
-        "partei_kurzname": "Einzelbewerber#Topcuoglu",
+        "partei_langname": "Einzelbewerber",
+        "partei_kurzname": "Einzelbewerber",
         "wahlbezirk_identifier": 26,
         "name": "Topcuoglu",
         "namensvorsatz": "",
@@ -10765,8 +10765,8 @@
     },
     {
         "wahl_bezeichnung": "Ratswahl NRW",
-        "partei_langname": "Einzelbewerber#Abels",
-        "partei_kurzname": "Einzelbewerber#Abels",
+        "partei_langname": "Einzelbewerber",
+        "partei_kurzname": "Einzelbewerber",
         "wahlbezirk_identifier": 4,
         "name": "Abels",
         "namensvorsatz": "",

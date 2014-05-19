@@ -3,6 +3,9 @@
 angular.module('candidatesCologneElectionApp')
   .controller('MainCtrl', ['$scope', '$http', function ($scope, $http) {
 
+    var element = document.getElementById('map');
+    element.style.height = '' + (window.innerHeight * 0.85) + 'px';
+
     var map = new OpenLayers.Map('map');
     map.addLayer(new OpenLayers.Layer.OSM());
 
@@ -11,16 +14,16 @@ angular.module('candidatesCologneElectionApp')
     var position       = new OpenLayers.LonLat(6.9599115, 50.9406645).transform(fromProjection, toProjection);
     map.setCenter(position, 11.25);
 
-    var markers = new OpenLayers.Layer.Markers('Markers');
+    var markerLayer = new OpenLayers.Layer.Markers('Markers');
 
-    map.addLayer(markers);
+    map.addLayer(markerLayer);
 
     var colors = {
       'spd': 'ff0000',
       'cdu': '000000',
       'fdp': 'fed530',
-      'grüne': '7ab857',
-      'linke': 'dc0000',
+      'grne': '7ab857',
+      'dielinke': 'dc0000',
       'afd': '009ee0',
       'fwk': '004191',
       'deinefreunde': '00aff3',
@@ -29,7 +32,9 @@ angular.module('candidatesCologneElectionApp')
       'einzelbewerber': 'ffffff',
       'einheit': 'ffae00',
       'big': '061f71',
-      'pronrw': '875d02'
+      'npd': '572d00',
+      'prokln': '875d02',
+      'ld': 'ca6010'
     };
 
     $scope.parties = [];
@@ -38,19 +43,42 @@ angular.module('candidatesCologneElectionApp')
 
     function partyhash(party) {
       var result = party.toLowerCase().replace(/[^a-z]/g,'');
-      if (result.indexOf('einzelbewerber') == 0) {
-        return 'einzelbewerber';
-      }
 
       return result;
     }
 
+    $scope.toggleSelection = function(party) {
+      party.selected = !party.selected;
+
+      if (party.selected) {
+        for (var index in party.markers) {
+          var marker = party.markers[index];
+          markerLayer.addMarker(marker);        
+        }
+      }
+      else {
+        for (var index in party.markers) {
+          var marker = party.markers[index];
+          markerLayer.removeMarker(marker);        
+        }
+      }
+    }
+    
+    $scope.selectionAlpha = function(party) {
+      return party.selected ? 1 : 0.5;
+    }
+
+    var markers = [];
+
     $http.get('data.json').success(function(candidates) {
       for (var index in candidates) {
         var candidate = candidates[index];
-        parties[candidate.partei_kurzname] = parties[candidate.partei_kurzname] + 1;
+        var key = candidate.partei_kurzname;
 
-        var partyshort = partyhash(candidate.partei_kurzname);
+        if (!parties[key]) parties[key] = 0;
+        parties[key] = parties[key] + 1;
+
+        var partyshort = partyhash(key);
 
         position = new OpenLayers.LonLat(parseFloat(candidate.GeocodeLng), parseFloat(candidate.GeocodeLat));
         position = position.transform(fromProjection, toProjection);
@@ -60,15 +88,21 @@ angular.module('candidatesCologneElectionApp')
 
         var marker = new OpenLayers.Marker(position, icon);
 
-        markers.addMarker(marker);
+        markerLayer.addMarker(marker);
+
+        if (!markers[key]) markers[key] = [];
+        markers[key].push(marker);
       }
 
       for (var key in parties) {
         var partyshort = partyhash(key);
+
         $scope.parties.push({
           'name':key,
           'color':colors[partyshort],
-          'count':parties[key]
+          'count':parties[key],
+          'selected':true,
+          'markers':markers[key]
         });
       }
     });

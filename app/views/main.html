@@ -4,9 +4,14 @@
     <li><a ng-href="#">About</a></li>
   </ul>
   <h3 class="text-muted">Köln: Kandidaten zur Kommunalwahl 2014</h3>
-</div>
 
-<div id="map" style="height:480px"></div>
+  <div ng-repeat="party in parties">
+    <div style="float:left; background-color:#{{party.color}}; border-radius:4px; margin:4px; padding:4px; color:#fff; border: 0.5px solid black; text-shadow: 0 0 2px #000;opacity:{{selectionAlpha(party)}}" ng-click="toggleSelection(party)">{{party.name}} ({{party.count}})</div>
+</div>
+  
+</div>
+<br style="clear:both"/>
+<div id="map"></div>
 
 <div class="footer">
 </div>
